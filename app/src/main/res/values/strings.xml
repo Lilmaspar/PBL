@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">PBL_mobile</string>
+    <string name="slide1">Selamat Datang di SawahGuard</string>
+    <string name="desc1">SawahGuard menggabungkan tenaga surya dan sistem deteksi canggih untuk menjaga hasil panen tetap aman.</string>
+    <string name="slide2">Otomatisasi Pengusiran Burung Pipit</string>
+    <string name="desc2">Nikmati kemudahan pengusiran burung pipit tanpa perlu turun langsung ke lapangan. SawahGuard menggunakan motor servo yang dapat dikendalikan langsung dari aplikasi ini.</string>
+    <string name="slide3">Deteksi Akurat</string>
+    <string name="desc3">Dengan integrasi Sensor Radar Gelombang Mikro dan Sensor Gerak (PIR), SawahGuard mendeteksi burung dari jarak jauh dan dekat, memberikan perlindungan optimal bagi sawah Anda.</string>
+    <string name="slide4">Mulai sekarang!</string>
+    <string name="desc4">Mulai sekarang dan lindungi sawah Anda dengan SawahGuard!</string>
+</resources>
