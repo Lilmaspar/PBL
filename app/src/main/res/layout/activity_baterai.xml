@@ -110,14 +110,6 @@
                 android:textColor="@color/black"
                 android:layout_marginBottom="4dp" />
 
-            <TextView
-                android:id="@+id/tvBatteryTemperature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Suhu Baterai: 30°C"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:layout_marginBottom="4dp" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

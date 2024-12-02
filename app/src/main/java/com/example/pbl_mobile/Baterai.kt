@@ -31,7 +31,6 @@ class Baterai : AppCompatActivity() {
         tvBatteryVoltage = findViewById(R.id.tvBatteryVoltage)
         tvBatteryCurrent = findViewById(R.id.tvBatteryCurrent)
         tvBatteryPower = findViewById(R.id.tvBatteryPower)
-        tvBatteryTemperature = findViewById(R.id.tvBatteryTemperature)
         imgBatteryStatus = findViewById(R.id.imgBatteryStatus)
 
         // Contoh data, ini bisa berasal dari API atau sensor
@@ -46,7 +45,6 @@ class Baterai : AppCompatActivity() {
         tvBatteryVoltage.text = "Tegangan: ${batteryVoltage}V"
         tvBatteryCurrent.text = "Arus: ${batteryCurrent}A"
         tvBatteryPower.text = "Daya: ${batteryPower}W"
-        tvBatteryTemperature.text = "Suhu Baterai: ${batteryTemperature}°C"
 
         // Ubah ikon status baterai sesuai kapasitas (contoh perubahan sederhana)
         imgBatteryStatus.setImageResource(
