@@ -21,7 +21,7 @@
             android:name=".Pengaturan"
             android:exported="false" />
         <activity
-            android:name=".KeteranganStatus"
+            android:name=".Laporan"
             android:exported="false" />
         <activity
             android:name=".Baterai"

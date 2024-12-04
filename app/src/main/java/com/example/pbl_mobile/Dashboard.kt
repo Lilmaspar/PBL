@@ -49,7 +49,7 @@ class Dashboard : AppCompatActivity() {
         // Listener untuk tombol "Laporan"
         val laporanButton = findViewById<ImageView>(R.id.laporan)
         laporanButton.setOnClickListener {
-            val intent = Intent(this, KeteranganStatus::class.java)
+            val intent = Intent(this, Laporan::class.java)
             startActivity(intent)
         }
 
