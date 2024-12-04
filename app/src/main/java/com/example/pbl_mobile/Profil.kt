@@ -34,6 +34,7 @@ class Profil : AppCompatActivity() {
         val userName = sharedPreferences.getString("USER_NAME", "User") ?: "User"
         val email = sharedPreferences.getString("EMAIL", "Email tidak tersedia") ?: "Email tidak tersedia"
         val nomor = sharedPreferences.getString("NOMOR", "Nomor tidak tersedia") ?: "Nomor tidak tersedia"
+        val userId = sharedPreferences.getString("USER_ID", "") ?: ""
 
         // Menampilkan data di TextView
         tvEmail.text = email

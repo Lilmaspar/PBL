@@ -20,6 +20,7 @@ class Dashboard : AppCompatActivity() {
         // Mengambil data pengguna dari SharedPreferences
         val sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
         val userName = sharedPreferences.getString("USER_NAME", "User") ?: "User"
+        val userId = sharedPreferences.getString("USER_ID", "") ?: ""
 
         // Set teks untuk salam berdasarkan nama pengguna
         tvGreeting.text = "Hello, $userName"
