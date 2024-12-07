@@ -14,8 +14,6 @@ class Pengaturan : AppCompatActivity() {
 
     private lateinit var tvSpeed: TextView
     private lateinit var seekBarSpeed: SeekBar
-    private lateinit var tvDirection: TextView
-    private lateinit var radioGroupDirection: RadioGroup
     private lateinit var btnApplySettings: Button
     private lateinit var tvStatusMessage: TextView
 
@@ -31,8 +29,6 @@ class Pengaturan : AppCompatActivity() {
 
         tvSpeed = findViewById(R.id.tvSpeed)
         seekBarSpeed = findViewById(R.id.seekBarSpeed)
-        tvDirection = findViewById(R.id.tvDirection)
-        radioGroupDirection = findViewById(R.id.radioGroupDirection)
         btnApplySettings = findViewById(R.id.btnApplySettings)
         tvStatusMessage = findViewById(R.id.tvStatusMessage)
 
@@ -53,10 +49,9 @@ class Pengaturan : AppCompatActivity() {
 
     private fun applySettings() {
         val speed = seekBarSpeed.progress
-        val direction = if (findViewById<RadioButton>(R.id.rbLeft).isChecked) "Kiri" else "Kanan"
 
         // Menampilkan pengaturan yang diterapkan
-        tvStatusMessage.text = "Pengaturan diterapkan: Kecepatan: $speed, Arah: $direction."
+        tvStatusMessage.text = "Pengaturan diterapkan: Kecepatan: $speed"
 
         // Anda bisa menambahkan logika untuk mengatur motor servo di sini
         // Misalnya, mengirim pengaturan ke perangkat keras atau microcontroller

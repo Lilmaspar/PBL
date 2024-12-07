@@ -26,19 +26,21 @@ class LaporanAdapter(private val reportList: List<ReportData>) :
 
     override fun onBindViewHolder(holder: ReportViewHolder, position: Int) {
         val report = reportList[position]
-        holder.tvTime.text = "Waktu: ${report.time}"
+        holder.tvTime.text = "${report.time}"
         holder.tvSensorStatus.text =
-            "Status Sensor: ${if (report.isDetected) "Terdeteksi" else "Tidak Terdeteksi"}"
+            "${if (report.isDetected) "Terdeteksi" else "Tidak Terdeteksi"}"
         holder.tvDeviceStatus.text =
-            "Status Perangkat: ${if (report.isDeviceActive) "Aktif" else "Tidak Aktif"}"
+            "${if (report.isDeviceActive) "Aktif" else "Tidak Aktif"}"
 
         // Ubah warna latar belakang berdasarkan kondisi
-        val backgroundColor = if (report.isDetected && report.isDeviceActive) {
-            Color.parseColor("#A5D6A7") // Hijau
+        val background = if (report.isDetected && report.isDeviceActive) {
+            holder.itemView.context.getDrawable(R.drawable.matcha) // Warna hijau
         } else {
-            Color.parseColor("#EF9A9A") // Merah
+            holder.itemView.context.getDrawable(R.drawable.pink) // Warna merah
         }
-        holder.itemView.setBackgroundColor(backgroundColor)
+
+        // Set warna latar belakang pada root view
+        holder.itemView.setBackground(background)
     }
 
     override fun getItemCount() = reportList.size

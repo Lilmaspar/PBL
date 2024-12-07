@@ -58,41 +58,6 @@
         android:max="100"
         android:layout_marginBottom="24dp" />
 
-    <!-- Direction Control -->
-    <TextView
-        android:id="@+id/tvDirection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Arah: Kiri"
-        android:textSize="18sp"
-        android:layout_marginBottom="8dp"
-        android:textColor="@color/black" />
-
-    <RadioGroup
-        android:id="@+id/radioGroupDirection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="24dp">
-
-        <RadioButton
-            android:id="@+id/rbLeft"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Kiri"
-            android:textSize="16sp"
-            android:textColor="@color/black" />
-
-        <RadioButton
-            android:id="@+id/rbRight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Kanan"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="24dp" />
-    </RadioGroup>
-
     <!-- Apply Settings Button -->
     <Button
         android:id="@+id/btnApplySettings"

@@ -24,7 +24,10 @@ class Laporan : AppCompatActivity() {
             ReportData("10.00", true, true),
             ReportData("09.30", false, false),
             ReportData("12.30", false, false),
+            ReportData("14.20", true, true),
+            ReportData("17.15", true, false),
             ReportData("08.45", true, false)
+
         )
 
         // Urutkan data secara descending berdasarkan waktu
