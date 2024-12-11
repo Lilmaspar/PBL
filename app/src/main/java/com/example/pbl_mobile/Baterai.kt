@@ -7,8 +7,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import retrofit2.Call
-import retrofit2.Callback
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 class Baterai : AppCompatActivity() {
@@ -36,19 +39,37 @@ class Baterai : AppCompatActivity() {
         tvBatteryPower = findViewById(R.id.tvBatteryPower)
         imgBatteryStatus = findViewById(R.id.imgBatteryStatus)
 
-        // Mengambil data dari API menggunakan Retrofit
-        RetrofitClient.apiService.getBateraiData().enqueue(object : Callback<BateraiData> {
-            override fun onResponse(call: Call<BateraiData>, response: Response<BateraiData>) {
-                if (response.isSuccessful) {
-                    val data = response.body()
+        // Mengambil data dari API menggunakan Coroutine
+        lifecycleScope.launch {
+            // Panggil updateBatteryData pertama kali saat activity dimulai
+            updateBatteryData()
 
-                    if (data != null) {
-                        // Mengatur data ke tampilan
-                        val batteryPercentage = calculateBatteryPercentage(data.tegangan)
+            // Gunakan Coroutine untuk mengambil data secara berkala
+            val refreshInterval = 5000L // interval dalam milidetik (5 detik)
+            while (true) {
+                updateBatteryData()  // Panggil updateBatteryData setiap interval
+                delay(refreshInterval)  // Tunggu sesuai interval
+            }
+        }
+    }
+
+    // Fungsi untuk mengambil data baterai dan memperbarui UI
+    private suspend fun updateBatteryData() {
+        try {
+            // Mengambil data dari API dengan Retrofit secara asinkron
+            val response: Response<BateraiData> = RetrofitClient.apiService.getBateraiData()
+
+            if (response.isSuccessful) {
+                val data = response.body()
+
+                if (data != null) {
+                    // Mengatur data ke tampilan
+                    val batteryPercentage = calculateBatteryPercentage(data.current)
+                    withContext(Dispatchers.Main) {
                         tvBatteryPercentage.text = "$batteryPercentage%"
-                        tvBatteryVoltage.text = "Tegangan: ${data.tegangan}V"
-                        tvBatteryCurrent.text = "Arus: ${data.arus}A"
-                        tvBatteryPower.text = "Daya: ${data.daya}W"
+                        tvBatteryVoltage.text = "Tegangan: ${data.voltage}V"
+                        tvBatteryCurrent.text = "Arus: ${data.current}A"
+                        tvBatteryPower.text = "Daya: ${data.power}W"
 
                         // Ubah ikon status baterai sesuai kapasitas
                         imgBatteryStatus.setImageResource(
@@ -60,25 +81,33 @@ class Baterai : AppCompatActivity() {
                             }
                         )
                     }
-                } else {
-                    Toast.makeText(this@Baterai, "Gagal mengambil data", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    showToast("Gagal mengambil data")
                 }
             }
-
-            override fun onFailure(call: Call<BateraiData>, t: Throwable) {
-                Toast.makeText(this@Baterai, "Terjadi kesalahan: ${t.message}", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                showToast("Terjadi kesalahan: ${e.message}")
             }
-        })
+        }
     }
 
-    private fun calculateBatteryPercentage(voltage: Float): Int {
+    // Fungsi untuk menghitung persentase baterai
+    private fun calculateBatteryPercentage(current: Float): Int {
         return when {
-            voltage >= 13.5 -> 100
-            voltage >= 13.0 -> 80
-            voltage >= 12.5 -> 60
-            voltage >= 12.0 -> 40
-            voltage >= 11.5 -> 20
+            current >= 9.0 -> 100
+            current >= 6.1 -> 80
+            current >= 5.1 -> 60
+            current >= 3.1 -> 40
+            current >= 2.0 -> 20
             else -> 10
         }
+    }
+
+    // Fungsi untuk menampilkan toast
+    private fun showToast(message: String) {
+        Toast.makeText(this@Baterai, message, Toast.LENGTH_SHORT).show()
     }
 }

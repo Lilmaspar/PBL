@@ -1,8 +1,8 @@
 package com.example.pbl_mobile
 
 data class BateraiData(
-    val tegangan: Float,
-    val arus: Float,
-    val daya: Float,
+    val voltage: Float,
+    val current: Float,
+    val power: Float,
     val timestamp: String
 )

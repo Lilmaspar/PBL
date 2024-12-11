@@ -11,67 +11,11 @@
     <TextView
         android:id="@+id/tvTime"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="10:30 AM"
-        android:textStyle="bold"
-        android:textSize="16dp"
-        android:textColor="@android:color/black" />
+        android:layout_height="wrap_content"/>
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tvKeterangan"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"/>
 
-        <LinearLayout
-            android:layout_width="155dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_marginTop="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Perangkat:"
-                android:textSize="15dp"
-                android:textColor="@android:color/black" />
-
-            <TextView
-                android:id="@+id/tvDeviceStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Tidak Aktif"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                android:textColor="@android:color/black" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="155dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_marginTop="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hama:"
-                android:textSize="15dp"
-                android:textColor="@android:color/black" />
-
-            <TextView
-                android:id="@+id/tvSensorStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Tidak Terdeteksi"
-                android:textStyle="bold"
-                android:textSize="16dp"
-                android:textColor="@android:color/black" />
-
-        </LinearLayout>
-    </LinearLayout>
 </LinearLayout>

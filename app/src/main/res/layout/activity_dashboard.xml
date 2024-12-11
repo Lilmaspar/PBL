@@ -65,18 +65,18 @@
             android:id="@+id/imgBatteryStatus"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:src="@drawable/baterai_full"
+            android:src="@drawable/baterai"
             android:contentDescription="Battery Status" />
 
-        <!-- Battery Percentage Text -->
         <TextView
             android:id="@+id/tvBatteryPercentage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="85%"
-            android:textSize="60sp"
+            android:text="0%"
+            android:textSize="36sp"
             android:textStyle="bold"
-            android:textColor="@color/matcha"/>
+            android:textColor="@color/matcha"
+            android:layout_marginTop="8dp" />
 
     </LinearLayout>
 
