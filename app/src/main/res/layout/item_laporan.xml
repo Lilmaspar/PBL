@@ -6,12 +6,13 @@
     android:padding="16dp"
     android:layout_margin="8dp"
     android:elevation="4dp"
-    android:background="@color/white">
+    android:background="@drawable/white">
 
     <TextView
         android:id="@+id/tvTime"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:gravity="right" />
 
     <TextView
         android:id="@+id/tvKeterangan"

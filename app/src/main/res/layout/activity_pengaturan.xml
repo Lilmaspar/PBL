@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@drawable/bggreen"
     android:padding="16dp">
 
     <!-- Back Button -->
@@ -12,7 +12,7 @@
         android:id="@+id/btnBack"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="80dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/back"
         android:contentDescription="Back Button" />
@@ -26,7 +26,7 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="20dp"
         android:textColor="@color/black" />
 
     <!-- Instruction -->
@@ -37,7 +37,7 @@
         android:text="Atur kecepatan, arah, dan durasi gerakan motor servo."
         android:textSize="16sp"
         android:gravity="center"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="30dp"
         android:textColor="@color/grey" />
 
     <!-- Speed Control -->
@@ -55,15 +55,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="2"
-        android:layout_marginBottom="24dp" />
+        android:layout_marginBottom="30dp" />
 
     <!-- Servo Direction -->
     <RadioGroup
         android:id="@+id/servoDirectionGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="8dp">
+        android:orientation="horizontal">
 
         <!-- RadioButton untuk 0 derajat -->
         <RadioButton
@@ -88,11 +87,12 @@
         android:layout_height="wrap_content"
         android:text="Arah Servo: 0°"
         android:textSize="18sp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:textColor="@color/black" />
 
     <!-- Apply Settings Button -->
-    <Button
+<!--    <Button
         android:id="@+id/btnApplySettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -101,6 +101,17 @@
         android:textColor="@android:color/white"
         android:textSize="16sp"
         android:layout_marginBottom="16dp"
+        android:paddingVertical="12dp" />-->
+
+    <Button
+        android:id="@+id/btnGerakkan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gerakkan Servo Manual"
+        android:background="@drawable/matcha"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:layout_marginBottom="20dp"
         android:paddingVertical="12dp" />
 
     <!-- Status Message -->

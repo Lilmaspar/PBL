@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@color/white">
+    android:background="@drawable/bgregister">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:src="@drawable/back"
             android:contentDescription="Back Button"
             android:layout_gravity="start"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="70dp" />
 
         <TextView
             android:id="@+id/tvTitle"
@@ -35,6 +35,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Memantau kapasitas daya baterai yang diisi oleh panel surya"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
             android:textSize="16sp"
             android:textColor="@color/grey"
             android:padding="4dp" />
@@ -45,7 +47,7 @@
             android:layout_height="150dp"
             android:src="@drawable/baterai"
             android:contentDescription="Battery Status"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="25dp" />
 
         <TextView
             android:id="@+id/tvBatteryPercentage"
@@ -55,7 +57,7 @@
             android:textSize="36sp"
             android:textStyle="bold"
             android:textColor="@color/matcha"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="15dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,7 +65,7 @@
             android:orientation="vertical"
             android:background="@drawable/rounded_corner"
             android:padding="16dp"
-            android:layout_marginTop="12dp">
+            android:layout_marginTop="20dp">
 
             <TextView
                 android:layout_width="wrap_content"

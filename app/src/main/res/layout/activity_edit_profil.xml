@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="15dp"
-    android:background="@color/white">
+    android:background="@drawable/bggreen">
 
     <ImageButton
         android:id="@+id/btnBack"
@@ -19,7 +19,7 @@
         android:id="@+id/tvProfilTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="110dp"
         android:text="EDIT PROFIL"
         android:textColor="@color/black"
         android:textSize="30sp"
@@ -104,6 +104,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/grey"
             android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"
             android:text="Simpan"
             android:textColor="@color/black"
             android:layout_below="@id/tvNomor"

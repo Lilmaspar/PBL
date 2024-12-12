@@ -50,7 +50,7 @@ class Onboarding : AppCompatActivity() {
 
         // Inisialisasi SharedPreferences untuk menyimpan status onboarding
         sharedPreferences = getSharedPreferences("OnBoardingPrefs", MODE_PRIVATE)
-        val isFirstTime = sharedPreferences.getBoolean("isFirstTime", false)
+        val isFirstTime = sharedPreferences.getBoolean("isFirstTime", true)
 
         // Jika bukan pertama kali membuka aplikasi, langsung menuju halaman login
         if (isFirstTime) {
@@ -90,7 +90,7 @@ class Onboarding : AppCompatActivity() {
                 slideViewPager.currentItem = getItem(1)
             } else {
                 // Simpan status bahwa onboarding telah selesai
-                sharedPreferences.edit().putBoolean("isFirstTime", true).apply()
+                sharedPreferences.edit().putBoolean("isFirstTime", false).apply()
 
                 // Pindah ke halaman Mulai setelah onboarding selesai
                 startActivity(Intent(this@Onboarding, Mulai::class.java))
@@ -101,7 +101,7 @@ class Onboarding : AppCompatActivity() {
         // Tombol "Skip" untuk melewati onboarding dan langsung ke halaman login
         skipButton.setOnClickListener {
             // Simpan status bahwa onboarding telah dilewati
-            sharedPreferences.edit().putBoolean("isFirstTime", true).apply()
+            sharedPreferences.edit().putBoolean("isFirstTime", false).apply()
 
             // Pindah ke halaman login
             startActivity(Intent(this@Onboarding, Login::class.java))

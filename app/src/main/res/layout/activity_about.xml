@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bgabout3"
+    android:background="@drawable/bgabout"
     >
 
     <ImageButton
@@ -33,7 +33,7 @@
     <LinearLayout
         android:layout_width="376dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="350dp"
+        android:layout_marginTop="200dp"
         android:layout_marginLeft="17dp"
         android:orientation="vertical"
         android:padding="16dp">
@@ -55,7 +55,7 @@
             android:text="Menggunakan motor servo sebagai alat pengusir burung pipit otomatis yang dioperasikan melalui aplikasi mobile, menggantikan metode manual yang kurang efektif. Motor servo ini dapat digerakkan sesuai kebutuhan untuk mengusir burung pipit secara otomatis, meningkatkan efektivitas dalam menjaga hasil panen. Selain itu, sistem ini mengandalkan sumber energi terbarukan dari panel surya, yang membuatnya lebih ramah lingkungan dan hemat biaya operasional. "
             android:textSize="16sp"
             android:textColor="@color/black"
-            android:gravity="start"/>
+            android:gravity="end"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -66,7 +66,7 @@
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_gravity="end"/>
+            android:layout_gravity="left"/>
 
         <TextView
             android:layout_width="wrap_content"

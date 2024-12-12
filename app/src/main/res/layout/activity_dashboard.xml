@@ -5,90 +5,118 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:background="@drawable/background"
+    android:background="@drawable/bgdb"
     android:padding="10dp"
     tools:context=".Dashboard">
 
-    <!-- Greeting Text -->
+    <!-- Toolbar -->
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvGreeting"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:text="Halo, "
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginStart="20dp" />
+
+        <ImageView
+            android:id="@+id/profil"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="3dp"
+            android:background="@drawable/white"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/person"
+            android:contentDescription="Profile" />
+    </LinearLayout>
+
     <TextView
-        android:id="@+id/tvGreeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Halo, "
-        android:textSize="24sp"
+        android:id="@+id/waktu"
+        android:text="08.00"
         android:textStyle="bold"
-        android:layout_marginStart="30dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="30dp" />
-
-    <!-- Profile Image -->
-    <ImageView
-        android:id="@+id/profil"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="300dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/white"
-        android:padding="6dp"
-        android:src="@drawable/person"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ToggleButton
-        android:id="@+id/power"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:background="@drawable/toggle_bg"
-        android:textOff=""
-        android:textOn=""
-        android:textColor="@color/black"
+        android:textSize="50dp"
         android:layout_marginTop="50dp"
-        android:padding="8dp"
-        app:layout_constraintTop_toBottomOf="@id/profil"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <LinearLayout
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/infobaterai"
+        android:id="@+id/tanggal"
+        android:text="Rabu, 18 Desember 2024"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        app:layout_constraintTop_toBottomOf="@id/waktu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Power Button -->
+    <LinearLayout
+        android:id="@+id/combined_power_battery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="50dp"
-        app:layout_constraintTop_toBottomOf="@id/power"
+        app:layout_constraintTop_toBottomOf="@id/tanggal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" >
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="70dp">
 
-        <ImageView
-            android:id="@+id/imgBatteryStatus"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:src="@drawable/baterai"
-            android:contentDescription="Battery Status" />
+        <ToggleButton
+            android:id="@+id/power"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:background="@drawable/toggle_bg"
+            android:textOff=""
+            android:textOn="" />
 
-        <TextView
-            android:id="@+id/tvBatteryPercentage"
+        <LinearLayout
+            android:id="@+id/infobaterai"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0%"
-            android:textSize="36sp"
-            android:textStyle="bold"
-            android:textColor="@color/matcha"
-            android:layout_marginTop="8dp" />
+            android:orientation="vertical"
+            android:layout_marginLeft="50dp"
+            android:gravity="center">
 
+            <ImageView
+                android:id="@+id/imgBatteryStatus"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/baterai"
+                android:contentDescription="Battery Status" />
+
+            <TextView
+                android:id="@+id/tvBatteryPercentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0%"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:textColor="@color/matcha" />
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- Battery Status Icon and Text -->
+    <!-- Navigation -->
     <LinearLayout
         android:id="@+id/llNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="50dp"
-        app:layout_constraintTop_toBottomOf="@id/infobaterai"
+        android:layout_marginTop="70dp"
+        app:layout_constraintTop_toBottomOf="@id/combined_power_battery"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -194,9 +222,8 @@
         android:text="ABOUT"
         android:textColor="@color/black"
         android:background="@drawable/grey"
+        android:layout_marginTop="80dp"
         app:layout_constraintTop_toBottomOf="@id/llNavigation"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="75dp"/>
-
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

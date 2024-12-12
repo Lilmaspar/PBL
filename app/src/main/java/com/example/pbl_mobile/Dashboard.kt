@@ -42,7 +42,7 @@ class Dashboard : AppCompatActivity() {
         // Get user data from SharedPreferences
         val sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
         val userName = sharedPreferences.getString("USER_NAME", "User") ?: "User"
-        tvGreeting.text = "Hello, $userName"
+        tvGreeting.text = "Halo, $userName"
 
         val isServoOn = sharedPreferences.getBoolean("SERVO_STATE", false)
         powerToggleButton.isChecked = isServoOn
