@@ -3,6 +3,8 @@ package com.example.pbl_mobile
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,7 +15,12 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,6 +40,8 @@ class Dashboard : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
+
+        startClock()
 
         powerToggleButton = findViewById(R.id.power)
         tvBatteryPercentage = findViewById(R.id.tvBatteryPercentage)
@@ -58,6 +67,31 @@ class Dashboard : AppCompatActivity() {
 
         // Set up navigation buttons
         setupNavigationButtons()
+    }
+
+    private fun startClock() {
+        val handler = Handler(Looper.getMainLooper())
+        val waktu = findViewById<TextView>(R.id.waktu)
+        val tanggal = findViewById<TextView>(R.id.tanggal)
+
+        val runnable = object : Runnable {
+            override fun run() {
+                // Format waktu dan tanggal
+                val calendar = Calendar.getInstance()
+                val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+                val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
+
+                // Perbarui TextView
+                waktu.text = timeFormat.format(calendar.time)
+                tanggal.text = dateFormat.format(calendar.time)
+
+                // Jalankan lagi setelah 1 detik
+                handler.postDelayed(this, 1000)
+            }
+        }
+
+        // Mulai Runnable
+        handler.post(runnable)
     }
 
     // Save ToggleButton state to SharedPreferences
@@ -105,37 +139,42 @@ class Dashboard : AppCompatActivity() {
     }
 
     private fun fetchBatteryData() {
-        // Gunakan coroutine untuk memanggil fungsi suspend
         lifecycleScope.launch {
-            try {
-                // Mengambil data baterai menggunakan Retrofit API secara asynchronous
-                val response = RetrofitClient.apiService.getBateraiData()
+            val refreshInterval = 5000L // 5 detik
+            while (true) {
+                try {
+                    val response = RetrofitClient.apiService.getBateraiData()
 
-                // Memeriksa apakah respons berhasil
-                if (response.isSuccessful) {
-                    val data = response.body()
-
-                    if (data != null) {
-                        val batteryPercentage = calculateBatteryPercentage(data.current)
-                        tvBatteryPercentage.text = "$batteryPercentage%"
-                        imgBatteryStatus.setImageResource(
-                            when {
-                                batteryPercentage >= 80 -> R.drawable.baterai_full
-                                batteryPercentage >= 50 -> R.drawable.baterai_half
-                                batteryPercentage >= 20 -> R.drawable.baterai_low
-                                else -> R.drawable.baterai_empty
+                    if (response.isSuccessful) {
+                        val data = response.body()
+                        if (data != null) {
+                            val batteryPercentage = calculateBatteryPercentage(data.current)
+                            withContext(Dispatchers.Main) {
+                                tvBatteryPercentage.text = "$batteryPercentage%"
+                                imgBatteryStatus.setImageResource(
+                                    when {
+                                        batteryPercentage >= 80 -> R.drawable.baterai_full
+                                        batteryPercentage >= 50 -> R.drawable.baterai_half
+                                        batteryPercentage >= 20 -> R.drawable.baterai_low
+                                        else -> R.drawable.baterai_empty
+                                    }
+                                )
                             }
-                        )
+                        }
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(this@Dashboard, "Gagal mengambil data baterai", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                } else {
-                    Toast.makeText(this@Dashboard, "Gagal mengambil data baterai", Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@Dashboard, "Kesalahan jaringan: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            } catch (e: Exception) {
-                Toast.makeText(this@Dashboard, "Kesalahan jaringan: ${e.message}", Toast.LENGTH_SHORT).show()
+                delay(refreshInterval) // Tunggu interval sebelum refresh
             }
         }
     }
-
 
     private fun setupNavigationButtons() {
         findViewById<ImageView>(R.id.profil).setOnClickListener {

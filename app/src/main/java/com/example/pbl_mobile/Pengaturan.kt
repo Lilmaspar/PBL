@@ -9,6 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class Pengaturan : AppCompatActivity() {
 
@@ -43,7 +47,7 @@ class Pengaturan : AppCompatActivity() {
         // Initialize views
         tvSpeed = findViewById(R.id.tvSpeed)
         seekBarSpeed = findViewById(R.id.seekBarSpeed)
-//        btnApplySettings = findViewById(R.id.btnApplySettings)
+//      btnApplySettings = findViewById(R.id.btnApplySettings)
         tvStatusMessage = findViewById(R.id.tvStatusMessage)
         servoDirectionGroup = findViewById(R.id.servoDirectionGroup)
         servoDirectionTextView = findViewById(R.id.servoDirectionTextView)
@@ -53,6 +57,16 @@ class Pengaturan : AppCompatActivity() {
         // SeekBar untuk kecepatan
         seekBarSpeed.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                // Update TextView dengan nilai kecepatan berdasarkan progress
+                val speedText = when (progress) {
+                    0 -> "Kecepatan: Lambat"
+                    1 -> "Kecepatan: Sedang"
+                    2 -> "Kecepatan: Cepat"
+                    else -> "Kecepatan: Lambat" // Default jika terjadi kesalahan
+                }
+                tvSpeed.text = speedText
+
+                // Kirim nilai kecepatan ke ESP32 menggunakan fungsi yang ada
                 ishowspeed(progress)
             }
 
@@ -200,6 +214,9 @@ class Pengaturan : AppCompatActivity() {
 
                 println("Response: $responseBody")
 
+                // Simpan data ke database
+                saveToDatabase("Servo dijalankan manual")
+
                 runOnUiThread {
                     Toast.makeText(this, "Servo Bergerak", Toast.LENGTH_SHORT).show()
                 }
@@ -211,6 +228,23 @@ class Pengaturan : AppCompatActivity() {
                 }
             }
         }.start()
+    }
+
+    private fun saveToDatabase(keterangan: String) {
+        RetrofitClient.apiService.saveReportData(keterangan).enqueue(object :
+            Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@Pengaturan, "Data berhasil disimpan ke database", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@Pengaturan, "Gagal menyimpan data: ${response.message()}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(this@Pengaturan, "Gagal menghubungi server: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun sendBlynkCommand(pin: String, value: String) {

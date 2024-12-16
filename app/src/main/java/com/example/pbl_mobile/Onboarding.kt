@@ -53,7 +53,7 @@ class Onboarding : AppCompatActivity() {
         val isFirstTime = sharedPreferences.getBoolean("isFirstTime", true)
 
         // Jika bukan pertama kali membuka aplikasi, langsung menuju halaman login
-        if (isFirstTime) {
+        if (!isFirstTime) {
             startActivity(Intent(this@Onboarding, Login::class.java))
             finish()
             return  // Keluar dari metode onCreate agar tidak mengeksekusi lebih lanjut
