@@ -29,7 +29,8 @@ interface ApiService {
     @FormUrlEncoded
     @POST("api/kelompok_5/save_history.php")
     fun saveReportData(
-        @Field("keterangan") keterangan: String
+        @Field("keterangan") keterangan: String,
+        @Field("detected_at") detected_at: String
     ): Call<ResponseBody>
 }
 

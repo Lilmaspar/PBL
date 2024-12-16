@@ -231,8 +231,10 @@ class Pengaturan : AppCompatActivity() {
     }
 
     private fun saveToDatabase(keterangan: String) {
-        RetrofitClient.apiService.saveReportData(keterangan).enqueue(object :
-            Callback<ResponseBody> {
+        val currentTime = System.currentTimeMillis()
+        val timestamp = java.text.SimpleDateFormat("yyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date(currentTime))
+
+        RetrofitClient.apiService.saveReportData(keterangan, timestamp).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     Toast.makeText(this@Pengaturan, "Data berhasil disimpan ke database", Toast.LENGTH_SHORT).show()
