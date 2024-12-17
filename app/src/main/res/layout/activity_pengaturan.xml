@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:text="Kecepatan: Lambat"
         android:textSize="18sp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="15dp"
         android:textColor="@color/black" />
 
     <SeekBar
@@ -55,13 +55,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="2"
-        android:layout_marginBottom="30dp" />
+        android:layout_marginBottom="20dp"
+        android:thumb="@drawable/pin" />
+
 
     <!-- Servo Direction -->
     <RadioGroup
         android:id="@+id/servoDirectionGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <!-- RadioButton untuk 0 derajat -->
@@ -70,6 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
+            android:layout_marginRight="70dp"
             android:text="Kiri" />
 
         <!-- RadioButton untuk 180 derajat -->
@@ -85,6 +89,7 @@
         android:id="@+id/servoDirectionTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="Arah Servo: 0°"
         android:textSize="18sp"
         android:layout_marginTop="30dp"
@@ -111,6 +116,7 @@
         android:background="@drawable/matcha"
         android:textColor="@android:color/white"
         android:textSize="16sp"
+        android:layout_marginTop="30dp"
         android:layout_marginBottom="20dp"
         android:paddingVertical="12dp" />
 

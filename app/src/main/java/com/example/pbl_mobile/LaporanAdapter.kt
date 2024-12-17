@@ -1,10 +1,10 @@
 package com.example.pbl_mobile
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 // Adapter untuk RecyclerView
@@ -26,8 +26,20 @@ class LaporanAdapter(private val reportList: List<ReportData>) :
         val report = reportList[position]
         holder.tvTime.text = report.detected_at
         holder.tvKeterangan.text = report.keterangan
+
+        // Tentukan warna berdasarkan keterangan
+        val backgroundDrawable = when (report.keterangan) {
+            "Servo nyala" -> ContextCompat.getDrawable(holder.itemView.context, R.drawable.matcha)
+            "Burung terdeteksi, Motor Servo bergerak!" -> ContextCompat.getDrawable(holder.itemView.context, R.drawable.matcha)
+            "Servo Dijalankan Manual" -> ContextCompat.getDrawable(holder.itemView.context, R.drawable.yellow)
+            "Servo dijalankan manual" -> ContextCompat.getDrawable(holder.itemView.context, R.drawable.yellow)
+            "Servo mati" -> ContextCompat.getDrawable(holder.itemView.context, R.drawable.pink)
+            else -> ContextCompat.getDrawable(holder.itemView.context, R.drawable.grey)
+        }
+
+        // Set warna latar belakang item
+        holder.itemView.background = backgroundDrawable
     }
 
     override fun getItemCount(): Int = reportList.size
 }
-
