@@ -26,12 +26,12 @@ interface ApiService {
     @GET("api/kelompok_5/get_laporan_data.php")
     fun getLaporanData(): Call<List<ReportData>>
 
-    @FormUrlEncoded
-    @POST("api/kelompok_5/save_history.php")
-    fun saveReportData(
-        @Field("keterangan") keterangan: String,
-        @Field("detected_at") detected_at: String
-    ): Call<ResponseBody>
+//    @FormUrlEncoded
+//    @POST("api/kelompok_5/save_history.php")
+//    fun saveReportData(
+//        @Field("keterangan") keterangan: String,
+//        @Field("detected_at") detected_at: String
+//    ): Call<ResponseBody>
 }
 
 

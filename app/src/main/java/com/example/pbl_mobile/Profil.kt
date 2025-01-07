@@ -43,8 +43,7 @@ class Profil : AppCompatActivity() {
 
         // Tombol kembali ke Dashboard
         findViewById<View>(R.id.btnBack).setOnClickListener {
-            val intent = Intent(this@Profil, Dashboard::class.java)
-            startActivity(intent) // Kembali ke Dashboard tanpa membuat instance baru
+            finish()
         }
 
         // Tombol Edit Profil

@@ -29,11 +29,10 @@ class LaporanAdapter(private val reportList: List<ReportData>) :
 
         // Tentukan warna berdasarkan keterangan
         val backgroundDrawable = when (report.keterangan) {
-            "Servo nyala" -> ContextCompat.getDrawable(holder.itemView.context, R.drawable.matcha)
-            "Burung terdeteksi, Motor Servo bergerak!" -> ContextCompat.getDrawable(holder.itemView.context, R.drawable.matcha)
-            "Servo Dijalankan Manual" -> ContextCompat.getDrawable(holder.itemView.context, R.drawable.yellow)
-            "Servo dijalankan manual" -> ContextCompat.getDrawable(holder.itemView.context, R.drawable.yellow)
-            "Servo mati" -> ContextCompat.getDrawable(holder.itemView.context, R.drawable.pink)
+            "Servo dinyalakan" -> ContextCompat.getDrawable(holder.itemView.context, R.drawable.matcha)
+            "Burung terdeteksi, Servo bergerak!" -> ContextCompat.getDrawable(holder.itemView.context, R.drawable.matcha)
+            "Servo dijalankan secara Manual" -> ContextCompat.getDrawable(holder.itemView.context, R.drawable.yellow)
+            "Servo dimatikan" -> ContextCompat.getDrawable(holder.itemView.context, R.drawable.pink)
             else -> ContextCompat.getDrawable(holder.itemView.context, R.drawable.grey)
         }
 

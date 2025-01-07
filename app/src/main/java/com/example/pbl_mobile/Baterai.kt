@@ -27,8 +27,6 @@ class Baterai : AppCompatActivity() {
         setContentView(R.layout.activity_baterai)
 
         findViewById<View>(R.id.btnBack).setOnClickListener {
-            val intent = Intent(this, Dashboard::class.java)
-            startActivity(intent)
             finish()
         }
 
@@ -64,12 +62,12 @@ class Baterai : AppCompatActivity() {
 
                 if (data != null) {
                     // Mengatur data ke tampilan
-                    val batteryPercentage = calculateBatteryPercentage(data.current)
+                    val batteryPercentage = calculateBatteryPercentage(data.voltage)
                     withContext(Dispatchers.Main) {
                         tvBatteryPercentage.text = "$batteryPercentage%"
-                        tvBatteryVoltage.text = "Tegangan: ${data.voltage}V"
-                        tvBatteryCurrent.text = "Arus: ${data.current}A"
-                        tvBatteryPower.text = "Daya: ${data.power}W"
+                        tvBatteryVoltage.text = "Tegangan: ${data.voltage} V"
+                        tvBatteryCurrent.text = "Arus: ${data.current} mA"
+                        tvBatteryPower.text = "Daya: ${data.power} mW"
 
                         // Ubah ikon status baterai sesuai kapasitas
                         imgBatteryStatus.setImageResource(

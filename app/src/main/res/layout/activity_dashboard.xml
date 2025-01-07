@@ -80,7 +80,8 @@
             android:layout_height="130dp"
             android:background="@drawable/toggle_bg"
             android:textOff=""
-            android:textOn="" />
+            android:textOn=""
+            android:checked="true"/>
 
         <LinearLayout
             android:id="@+id/infobaterai"

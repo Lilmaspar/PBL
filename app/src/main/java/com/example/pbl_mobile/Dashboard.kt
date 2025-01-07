@@ -2,15 +2,19 @@ package com.example.pbl_mobile
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -53,13 +57,9 @@ class Dashboard : AppCompatActivity() {
         val userName = sharedPreferences.getString("USER_NAME", "User") ?: "User"
         tvGreeting.text = "Halo, $userName"
 
-        val isServoOn = sharedPreferences.getBoolean("SERVO_STATE", false)
-        powerToggleButton.isChecked = isServoOn
-
         // Servo Toggle Button
         powerToggleButton.setOnCheckedChangeListener { _, isChecked ->
-            saveServoState(isChecked)
-            sendServoCommand(isChecked)
+            powerButton()
         }
 
         // Fetch battery data
@@ -94,17 +94,9 @@ class Dashboard : AppCompatActivity() {
         handler.post(runnable)
     }
 
-    // Save ToggleButton state to SharedPreferences
-    private fun saveServoState(isChecked: Boolean) {
-        val sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        sharedPreferences.edit()
-            .putBoolean("SERVO_STATE", isChecked)
-            .apply()
-    }
-
-    private fun power() {
+    private fun powerButton() {
         // Tentukan nilai berdasarkan status saat ini
-        val value = if (isOn) "0" else "1"
+        val value = if (isOn) "1" else "0"
 
         // Kirimkan nilai kecepatan dan arah ke ESP32
         val url = blynkUrl.toHttpUrlOrNull()?.newBuilder()
@@ -123,11 +115,18 @@ class Dashboard : AppCompatActivity() {
                 println("Response: $responseBody")
 
                 runOnUiThread {
-                    Toast.makeText(this, "Servo Bergerak", Toast.LENGTH_SHORT).show();
+                    // Check the value and display a different Toast message based on it
+                    val toastMessage = if (value == "1") {
+                        "Servo dinyalankan"
+                    } else {
+                        "Servo dimatikan"
+                    }
+                    Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show()
                 }
 
-                // Ubah status setelah pengiriman
                 isOn = !isOn // Toggle status
+
+                updateSettingButtonState()
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -148,7 +147,7 @@ class Dashboard : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val data = response.body()
                         if (data != null) {
-                            val batteryPercentage = calculateBatteryPercentage(data.current)
+                            val batteryPercentage = calculateBatteryPercentage(data.voltage)
                             withContext(Dispatchers.Main) {
                                 tvBatteryPercentage.text = "$batteryPercentage%"
                                 imgBatteryStatus.setImageResource(
@@ -176,6 +175,35 @@ class Dashboard : AppCompatActivity() {
         }
     }
 
+    private fun updateSettingButtonState() {
+        val settingButton = findViewById<ImageView>(R.id.setting)
+        val navSettings = findViewById<LinearLayout>(R.id.navSettings)
+        val tvSettings = findViewById<TextView>(R.id.tvSettings)
+
+        if (isOn) {
+            settingButton.setImageResource(R.drawable.setting_icon)
+            navSettings.setBackgroundResource(R.drawable.grey)
+            tvSettings.setTextColor(ContextCompat.getColor(this, R.color.black))
+            settingButton.isEnabled = false
+        } else {
+            settingButton.setImageResource(R.drawable.setting_icon)
+            navSettings.setBackgroundResource(R.drawable.white)
+            tvSettings.setTextColor(ContextCompat.getColor(this, R.color.matcha))
+            settingButton.isEnabled = true
+        }
+    }
+
+    private fun calculateBatteryPercentage(voltage: Float): Int {
+        return when {
+            voltage >= 9.0 -> 100
+            voltage >= 6.1 -> 80
+            voltage >= 5.1 -> 60
+            voltage >= 3.1 -> 40
+            voltage >= 2.0 -> 20
+            else -> 10
+        }
+    }
+
     private fun setupNavigationButtons() {
         findViewById<ImageView>(R.id.profil).setOnClickListener {
             startActivity(Intent(this, Profil::class.java))
@@ -183,8 +211,11 @@ class Dashboard : AppCompatActivity() {
         findViewById<ImageView>(R.id.statusbaterai).setOnClickListener {
             startActivity(Intent(this, Baterai::class.java))
         }
-        findViewById<ImageView>(R.id.setting).setOnClickListener {
-            startActivity(Intent(this, Pengaturan::class.java))
+        val settingButton = findViewById<ImageView>(R.id.setting)
+        settingButton.setOnClickListener {
+            if (settingButton.isEnabled) {
+                startActivity(Intent(this, Pengaturan::class.java))
+            }
         }
         findViewById<ImageView>(R.id.laporan).setOnClickListener {
             startActivity(Intent(this, Laporan::class.java))
@@ -194,45 +225,4 @@ class Dashboard : AppCompatActivity() {
         }
     }
 
-    private fun sendServoCommand(turnOn: Boolean) {
-        val value = if (turnOn) "1" else "0" // "0" = on, "1" = off
-        val url = blynkUrl.toHttpUrlOrNull()?.newBuilder()
-            ?.addQueryParameter("token", blynkToken)
-            ?.addQueryParameter("pin", "V1")
-            ?.addQueryParameter("value", value)
-            ?.build()
-
-        if (url == null) {
-            Toast.makeText(this, "URL tidak valid", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val request = Request.Builder().url(url).build()
-
-        Thread {
-            try {
-                val response = client.newCall(request).execute()
-                val responseBody = response.body?.string()
-                println("Servo Response: $responseBody")
-                val message = if (turnOn) "Motor Servo Nyala" else "Motor Servo Mati"
-                runOnUiThread { Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                runOnUiThread {
-                    Toast.makeText(this, "Gagal menghubungi server Blynk", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }.start()
-    }
-
-    private fun calculateBatteryPercentage(current: Float): Int {
-        return when {
-            current >= 9.0 -> 100
-            current >= 6.1 -> 80
-            current >= 5.1 -> 60
-            current >= 3.1 -> 40
-            current >= 2.0 -> 20
-            else -> 10
-        }
-    }
 }

@@ -42,7 +42,9 @@
             android:layout_weight="1"
             android:scrollbars="vertical"
             android:clipToPadding="false"
-            android:paddingBottom="16dp" />
+            android:paddingBottom="16dp"
+            android:src="@layout/item_laporan"
+            />
 
     </LinearLayout>
 

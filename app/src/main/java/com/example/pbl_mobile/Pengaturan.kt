@@ -28,19 +28,14 @@ class Pengaturan : AppCompatActivity() {
     private lateinit var servoDirectionTextView: TextView
     private lateinit var btnGerakkan: Button
 
-
-    private var directionValue = 0
-
     private var arah = false;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pengaturan)
- 
+
         // Back button
         findViewById<View>(R.id.btnBack).setOnClickListener {
-            val intent = Intent(this, Dashboard::class.java)
-            startActivity(intent)
             finish()
         }
 
@@ -53,6 +48,7 @@ class Pengaturan : AppCompatActivity() {
         servoDirectionTextView = findViewById(R.id.servoDirectionTextView)
         btnGerakkan = findViewById(R.id.btnGerakkan)
 
+        loadSettings()
 
         // SeekBar untuk kecepatan
         seekBarSpeed.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -62,12 +58,11 @@ class Pengaturan : AppCompatActivity() {
                     0 -> "Kecepatan: Lambat"
                     1 -> "Kecepatan: Sedang"
                     2 -> "Kecepatan: Cepat"
-                    else -> "Kecepatan: Lambat" // Default jika terjadi kesalahan
+                    else -> "Kecepatan: Sedang" // Default jika terjadi kesalahan
                 }
                 tvSpeed.text = speedText
-
-                // Kirim nilai kecepatan ke ESP32 menggunakan fungsi yang ada
-                ishowspeed(progress)
+                speedServo(progress)
+                saveSettings()  // Simpan pengaturan ke SharedPreferences
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -91,42 +86,19 @@ class Pengaturan : AppCompatActivity() {
             }
 
             servoDirectionTextView.text = directionText
-
-            direction()
+            directionServo()
+            saveSettings()  // Simpan pengaturan ke SharedPreferences
         }
-
-        // Tombol apply settings
-//        btnApplySettings.setOnClickListener {
-//            applySettings()
-//        }
 
         btnGerakkan.setOnClickListener {
             gerakkanServo()
         }
     }
 
-/*    private fun applySettings() {
-        val sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val isServoOn = sharedPreferences.getBoolean("SERVO_STATE", false)
-
-        if (!isServoOn) {
-            Toast.makeText(this, "Motor Servo dimatikan. Aktifkan dari Dashboard.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val speed = seekBarSpeed.progress
-
-        // Kirim pengaturan ke Blynk
-        sendBlynkCommand("V2", speed.toString()) // Kirim kecepatan ke pin V2
-        sendBlynkCommand("V3", directionValue.toString()) // Kirim arah ke pin V3
-
-        tvStatusMessage.text =
-            "Pengaturan diterapkan: Kecepatan: ${if (speed == 0) "Lambat" else if (speed == 1) "Sedang" else "Cepat"}, Arah: ${if (directionValue == 0) "0°" else "180°"}"
-    }*/
-
-    private fun direction() {
+    private fun directionServo() {
         // Tentukan nilai berdasarkan status saat ini
         val value = if (arah) "0" else "1"
+//        val value = if (servoDirectionGroup.checkedRadioButtonId == R.id.radio0Degree) "0" else "1"
 
         // Kirimkan nilai kecepatan dan arah ke ESP32
         val url = blynkUrl.toHttpUrlOrNull()?.newBuilder()
@@ -144,10 +116,6 @@ class Pengaturan : AppCompatActivity() {
 
                 println("Response: $responseBody")
 
-                runOnUiThread {
-                    Toast.makeText(this, "Motor Servo Berubah Arah", Toast.LENGTH_SHORT).show()
-                }
-
                 // Ubah status setelah pengiriman
                 arah = !arah // Toggle status
 
@@ -160,7 +128,7 @@ class Pengaturan : AppCompatActivity() {
         }.start()
     }
 
-    private fun ishowspeed(speed: Int) {
+    private fun speedServo(speed: Int) {
 
         val value = when (speed) {
             0 -> "0" // Kecepatan rendah
@@ -183,10 +151,6 @@ class Pengaturan : AppCompatActivity() {
                 val responseBody = response?.body?.string()
 
                 println("Response: $responseBody")
-
-                runOnUiThread {
-                    Toast.makeText(this, "Kecepatan motor servo berubah", Toast.LENGTH_SHORT).show()
-                }
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -214,9 +178,6 @@ class Pengaturan : AppCompatActivity() {
 
                 println("Response: $responseBody")
 
-                // Simpan data ke database
-                saveToDatabase("Servo dijalankan manual")
-
                 runOnUiThread {
                     Toast.makeText(this, "Servo Bergerak", Toast.LENGTH_SHORT).show()
                 }
@@ -230,49 +191,40 @@ class Pengaturan : AppCompatActivity() {
         }.start()
     }
 
-    private fun saveToDatabase(keterangan: String) {
-        val currentTime = System.currentTimeMillis()
-        val timestamp = java.text.SimpleDateFormat("yyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date(currentTime))
+    private fun saveSettings() {
+        val sharedPreferences = getSharedPreferences("Pengaturan", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
 
-        RetrofitClient.apiService.saveReportData(keterangan, timestamp).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.isSuccessful) {
-                    Toast.makeText(this@Pengaturan, "Data berhasil disimpan ke database", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this@Pengaturan, "Gagal menyimpan data: ${response.message()}", Toast.LENGTH_SHORT).show()
-                }
-            }
+        // Simpan kecepatan (nilai SeekBar)
+        editor.putInt("kecepatan", seekBarSpeed.progress)
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(this@Pengaturan, "Gagal menghubungi server: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
+        // Simpan arah servo (nilai RadioButton)
+        val selectedRadioButtonId = servoDirectionGroup.checkedRadioButtonId
+        editor.putInt("arah", selectedRadioButtonId)
+
+        editor.apply()  // Simpan perubahan
     }
 
-    private fun sendBlynkCommand(pin: String, value: String) {
-        val url = blynkUrl.toHttpUrlOrNull()?.newBuilder()
-            ?.addQueryParameter("token", blynkToken)
-            ?.addQueryParameter("pin", pin)
-            ?.addQueryParameter("value", value)
-            ?.build()
+    private fun loadSettings() {
+        val sharedPreferences = getSharedPreferences("Pengaturan", Context.MODE_PRIVATE)
 
-        val request = url?.let { Request.Builder().url(it).build() }
+        // Ambil nilai kecepatan dari SharedPreferences
+        val speed = sharedPreferences.getInt("kecepatan", 1)  // Default 1 (Sedang)
+        seekBarSpeed.progress = speed
+        // Update TextView dengan nilai kecepatan berdasarkan progress
+        tvSpeed.text = when (speed) {
+            0 -> "Kecepatan: Lambat"
+            1 -> "Kecepatan: Sedang"
+            2 -> "Kecepatan: Cepat"
+            else -> "Kecepatan: Sedang"
+        }
 
-        Thread {
-            try {
-                val response = request?.let { client.newCall(it).execute() }
-                val responseBody = response?.body?.string()
+        // Ambil nilai arah servo dari SharedPreferences
+        val arah = sharedPreferences.getInt("arah", R.id.radio0Degree) // Default 0°
+        servoDirectionGroup.check(arah)
 
-                println("Response: $responseBody")
-                runOnUiThread {
-                    Toast.makeText(this, "Pengaturan berhasil diterapkan ke $pin", Toast.LENGTH_SHORT).show()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                runOnUiThread {
-                    Toast.makeText(this, "Gagal menghubungi Blynk", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }.start()
+        // Update TextView dengan informasi arah yang dipilih
+        val directionText = if (arah == R.id.radio0Degree) "Arah Servo: 0°" else "Arah Servo: 180°"
+        servoDirectionTextView.text = directionText
     }
 }
